@@ -3,5 +3,5 @@ app:
     type: annotation
 
 user:
-    type: rest
     resource: "@AppBundle/Controller/User"
+    type: rest
