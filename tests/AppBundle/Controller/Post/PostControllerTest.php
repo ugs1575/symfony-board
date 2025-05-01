@@ -27,6 +27,12 @@ class PostControllerTest extends WebTestCase
         self::$user = $user;
     }
 
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        self::$em->createQuery('DELETE FROM AppBundle:User')->execute();
+    }
+
     public function tearDown()
     {
         self::$em->createQuery('DELETE FROM AppBundle:Post')->execute();
