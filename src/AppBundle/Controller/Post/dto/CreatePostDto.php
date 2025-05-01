@@ -14,20 +14,24 @@ class CreatePostDto
 
     /**
      * @var string
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "제목을 입력해주세요")
      * @Assert\Length(
-     *       min = 1,
+     *       min = 2,
      *       max = 50,
+     *       minMessage = "제목을 최소 {{ limit }}자 이상 입력해주세요.",
+     *       maxMessage = "제목은 최대 {{ limit }}자 까지 입력가능합니다."
      *  )
      */
     private $title;
 
     /**
      * @var string
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "내용을 입력해주세요")
      * @Assert\Length(
-     *       min = 1,
+     *       min = 2,
      *       max = 60000,
+     *       minMessage = "내용을 최소 {{ limit }}자 이상 입력해주세요.",
+     *       maxMessage = "내용은 최대 {{ limit }}자 까지 입력가능합니다."
      *  )
      */
     private $content;

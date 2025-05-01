@@ -132,8 +132,6 @@ class PostControllerTest extends WebTestCase
 
         //then
         $clientResponse = $client->getResponse();
-        $response = json_decode($clientResponse->getContent(), true);
-
         $this->assertEquals(Response::HTTP_NO_CONTENT, $clientResponse->getStatusCode());
 
         $posts = self::$em->getRepository('AppBundle:Post')->findAll();
