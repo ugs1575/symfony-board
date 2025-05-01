@@ -20,13 +20,38 @@ class PostService
 
     public function writePost(CreatePostDto $dto)
     {
-        $post = $this->createPost($dto);
+        $post = $this->create($dto);
         $this->om->persist($post);
         $this->om->flush();
 
         return [
             'id' => $post->getId(),
         ];
+    }
+
+    public function updatePost(Post $post, CreatePostDto $dto)
+    {
+        $post->update($dto->getTitle(), $dto->getContent());
+        $this->om->flush();
+
+        return $post;
+    }
+
+    public function deletePost(Post $post)
+    {
+        $this->om->remove($post);
+        $this->om->flush();
+
+        return $post;
+    }
+
+    private function create(CreatePostDto $dto)
+    {
+        return new Post(
+            $dto->getUser(),
+            $dto->getTitle(),
+            $dto->getContent()
+        );
     }
 
     private function createPost(CreatePostDto $dto)

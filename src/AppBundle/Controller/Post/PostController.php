@@ -39,6 +39,34 @@ class PostController extends BaseRestController
     }
 
     /**
+     * @RequestParam(name = "user", requirements="\d+", description="사용자")
+     * @RequestParam(name = "title", description="제목")
+     * @RequestParam(name = "content", description="내용")
+     *
+     * @param Post $id
+     * @param ParamFetcher $paramFetcher
+     * @return Response
+     */
+    public function putAction(Post $id, ParamFetcher $paramFetcher)
+    {
+        $form = $this->createForm(CreatePostType::class);
+        $form->submit($paramFetcher->all());
+
+        if (!$form->isValid()) {
+            return $this->handleView($this->view($form)->setStatusCode(Response::HTTP_BAD_REQUEST));
+        }
+
+        /** @var CreatePostDto $form */
+        $postDto = $form->getData();
+        $response = $this->get('app.service.post')->updatePost($id, $postDto);
+
+        $context = new Context();
+        $context->setGroups(["post_detail"]);
+        $view = $this->view($response)->setContext($context);
+        return $this->handleView($view);
+    }
+
+    /**
      * @RequestParam(name = "post", requirements="\d+", description="게시글")
      *
      * @param Post $id
@@ -46,12 +74,22 @@ class PostController extends BaseRestController
      */
     public function getAction(Post $id)
     {
-//        print_r($id->getTitle());
-//        exit;
         $context = new Context();
         $context->setGroups(["post_detail"]);
         $view = $this->view($id)->setContext($context);
         return $this->handleView($view);
+    }
+
+    /**
+     * @RequestParam(name = "post", requirements="\d+", description="게시글")
+     *
+     * @param Post $id
+     * @return Response
+     */
+    public function deleteAction(Post $id)
+    {
+        $this->get('app.service.post')->deletePost($id);
+        return $this->handleView($this->view()->setStatusCode(Response::HTTP_NO_CONTENT));
     }
 
     public function cgetAction()
