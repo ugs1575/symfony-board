@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Post\type;
 
 use AppBundle\Controller\Post\dto\CreatePostDto;
+use AppBundle\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,7 +25,7 @@ class CreatePostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CreatePostDto::class,
+            'data_class' => Post::class,
             'csrf_protection' => false,
         ]);
     }

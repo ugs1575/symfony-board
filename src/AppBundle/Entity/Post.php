@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
@@ -28,17 +29,28 @@ class Post
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @Serializer\Groups({"post_detail"})
+     *
      */
     private $user;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *        min = 1,
+     *        max = 50,
+     * )
      * @Serializer\Groups({"post_detail"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *        min = 1,
+     *        max = 60000,
+     * )
      * @Serializer\Groups({"post_detail"})
      */
     private $content;
@@ -55,19 +67,19 @@ class Post
      */
     private $updatedAt;
 
-    /**
-     * @param User $user
-     * @param $title
-     * @param $content
-     */
-    public function __construct(User $user, $title, $content)
-    {
-        $this->user = $user;
-        $this->title = $title;
-        $this->content = $content;
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
-    }
+//    /**
+//     * @param User $user
+//     * @param $title
+//     * @param $content
+//     */
+//    public function __construct(User $user, $title, $content)
+//    {
+//        $this->user = $user;
+//        $this->title = $title;
+//        $this->content = $content;
+//        $this->createdAt = new \DateTime();
+//        $this->updatedAt = new \DateTime();
+//    }
 
     /**
      * @return int
@@ -116,5 +128,55 @@ class Post
     {
         return $this->updatedAt;
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param mixed $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @param mixed $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    
 }
 

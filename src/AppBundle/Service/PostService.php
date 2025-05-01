@@ -2,7 +2,6 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Controller\Post\dto\CreatePostDto;
 use AppBundle\Entity\Post;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -18,9 +17,11 @@ class PostService
         $this->om = $om;
     }
 
-    public function writePost(CreatePostDto $dto)
+    public function writePost(Post $post)
     {
-        $post = $this->createPost($dto);
+        var_dump($post);
+        exit;
+        $post = $this->createPost($post);
         $this->om->persist($post);
         $this->om->flush();
 
@@ -29,12 +30,12 @@ class PostService
         ];
     }
 
-    private function createPost(CreatePostDto $dto)
+    private function createPost(Post $post)
     {
         return new Post(
-            $dto->getUser(),
-            $dto->getTitle(),
-            $dto->getContent()
+            $post->getUser(),
+            $post->getTitle(),
+            $post->getContent()
         );
     }
 }
