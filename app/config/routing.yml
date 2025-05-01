@@ -2,6 +2,6 @@ app:
     resource: '@AppBundle/Controller/'
     type: annotation
 
-user:
+post:
     type: rest
-    resource: "@AppBundle/Controller/User"
+    resource: "@AppBundle/Controller/Post"
