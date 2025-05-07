@@ -6,7 +6,10 @@ use AppBundle\Controller\BaseRestController;
 use AppBundle\Controller\Post\dto\CreatePostDto;
 use AppBundle\Controller\Post\type\CreatePostType;
 use AppBundle\Entity\Post;
+use AppBundle\Entity\Venue;
+use Doctrine\ORM\Query;
 use FOS\RestBundle\Context\Context;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,9 +95,33 @@ class PostController extends BaseRestController
         return $this->handleView($this->view()->setStatusCode(Response::HTTP_NO_CONTENT));
     }
 
-    public function cgetAction()
+    /**
+     * @QueryParam(name="page", requirements="\d+", default="1", description="Current page")
+     * @QueryParam(name="limit", requirements="\d+", default="20", description="Limit page")
+     * @QueryParam(name="keyword", nullable=true, strict=true, description="검색어")
+     *
+     * @param ParamFetcher $paramFetcher
+     * @return Response
+     */
+    public function cgetAction(ParamFetcher $paramFetcher)
     {
-    } // "get_users"     [GET] /users
+        $currentPage = $paramFetcher->get('page');
+        $maxPerPage = $paramFetcher->get('limit');
+        $filters = array_filter($paramFetcher->all(), function ($v, $k) {
+            return !in_array($k, ['page', 'limit']) && $v !== null;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        /** @var Query $filteredQuery */
+        $filteredQuery = $this->getManager()->getRepository(Post::class)->getFilteredQuery($filters);
+
+        $paginatedCollection = $this->get('pagination_factory')->createByQuery($filteredQuery,
+            $currentPage, $maxPerPage, 'get_posts', $paramFetcher->all());
+
+        $context = new Context();
+        $context->setGroups(["list", "post_detail"]);
+        $view = $this->view($paginatedCollection)->setContext($context);
+        return $this->handleView($view);
+    }
 
 
 }

@@ -45,6 +45,16 @@ class PostService
         return $post;
     }
 
+    public function getPosts()
+    {
+        $qb = $this->em->getRepository(Post::class)->createQueryBuilder();
+        $qb->select('p', 'u')
+            ->from(Post::class, 'p')
+            ->join('p.user', 'u');
+
+        $posts = $qb->getQuery()->getResult();
+    }
+
     private function create(CreatePostDto $dto)
     {
         return new Post(

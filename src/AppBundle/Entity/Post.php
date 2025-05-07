@@ -27,6 +27,7 @@ class Post
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @Serializer\Groups({"post_detail"})
      */
     private $user;

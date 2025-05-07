@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class PostRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getFilteredQuery(array $filters)
+    {
+        $queryBuilder = $this->createQueryBuilder('post');
+        $queryBuilder->orderBy('post.id', 'DESC');
+
+        foreach ($filters as $filter => $value) {
+
+            switch ($filter) {
+                case 'keyword' :
+                    $queryBuilder->andWhere("post.title LIKE :keyword")->setParameter('keyword', "%{$value}%")
+                        ->orWhere("post.content LIKE :keyword")->setParameter('keyword', "%{$value}%");
+                    break;
+            }
+        }
+
+        return $queryBuilder->getQuery();
+    }
 }

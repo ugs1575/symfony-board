@@ -38,3 +38,8 @@ services:
         class: AppBundle\Service\PostService
         arguments: [ '@doctrine.orm.default_entity_manager' ]
         public: true
+
+    pagination_factory:
+        class: AppBundle\Pagination\PaginationFactory
+        autowire: true
+        public: true
